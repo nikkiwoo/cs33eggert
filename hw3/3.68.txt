@@ -1,0 +1,12 @@
+Nikki Woo 204927670
+
+3.68
+A = 9, B = 5
+
+In this problem, we exercise the use of alignment. First, we look at the size of the integer array x[A][B]. We know that the computer allocates 184 bytes for this array. Since the subsequent data type of this structure is a long, we know that the machine code needs the address of that long to be a multiple of 8. However, we know that integers are of size 4. Thus, we know that the true size of the integer array will be either 184 or 180. Dividing those numbers by 4, we see that the array will have either 46 or 45 integers. From this, we know that A*B = 45 or A*B = 46.
+
+Going back to the beginning of the assembly code, we see that the machine allocates 8 bytes for the character array array[B]. Since the subsequent data type in this struct is an integer, we know that the machine had to make the address of this integer a multiple of 4. Thus, we can conclude that the true size of array[B] is greater than or equal to 5 and less than or equal to 8 (since char is of size 1). We keep this knowledge for later.
+
+Finally, we look at the size of short s[A]. The computer skips over 32 bytes to reach the long after the short array. We subtract the 8 bytes for the char array and 4 bytes for the integer before the short array and get 20 available bytes of data for the short array. Since the subsequent data type after the short array is a long, we know that the machine needed this address to be a multiple of 8. Thus, we know that the true size of the array is between 14 and 20 bytes. We get this number by subtracting an offset of 12 from the char array and integer before the short array. Since, we know that shorts are of size 2, we divide these numbers by 2 and see that the number of shorts in the array is between 7 and 10. 
+
+Given the constraints found for A and B, we see that the only logical whole number conclusion is that A is 9 and B is 5. We see that multiplying the two numbers together produces 45, A is between 7 and 10, and B is between 5 and 8.

@@ -1,0 +1,27 @@
+Nikki Woo 204927670
+
+3.70
+A
+Offset of e1.p = 0
+Offset of e1.y = 8
+Offset of e2.x = 0
+Offset of e2.next = 8
+
+B
+The structure requires 16 total bytes
+
+C
+Void proc (union ele *up) {
+	up->e2.x = *(up->e2.next->e1.p) Ð (up->e2.next->e1.y);
+}
+
+In order to best analyze this, letÕs take a look at the associated assembly code 
+1   proc:
+2	movq	8(%rdi), %rax
+3	movq	(%rax),	%rdx	
+4	movq	(%rdx), %rdx
+5	subq 	8(%rax), %rdx
+6	movq	%rdx, (%rdi)
+7	ret
+
+At the point of line 2, we donÕt know if %rax holds e2.next or e1.y. However, if we look at line 5, we see that 8 + %rax is accessed. This means that %rax should hold e2.next since incrementing this by 8 does not access unknown data. At this point, we need to know if 8 + %rax (which is a pointer to another ele union) points to a long (e1.y) or another ele union pointer (e2.next). In order to do this, we need to see what it is subtracting from. Going back to line 2, we know that %rax now holds e2.next. Next, in line 3, we see that the value of e2.next is accessed. However, this is once again ambiguous. %rdx can now hold e2.next->p or e2.next->x. To resolve this, we look at line 4. Line 4 dereferences what is in %rdx and transfers it to itself. This means that the value of %rdx before line 4 needed to be a pointer for this to work. Thus, %rdx held e2.next->p before line 4 and now holds the value at e2.next->p. As stated previously, e2.next->e1.y is what is being subtracted. We know that these two data types are long so this makes sense. Finally, we look at where this is being stored. We have two alternatives: e1.p or e1.x. Since we know that the two things being subtracted are longs and not addresses, we know that the eventual value is stored into e2.x. 
