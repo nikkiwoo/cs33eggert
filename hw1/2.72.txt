@@ -1,0 +1,5 @@
+2.72
+
+A) The conditional text in the code always succeeds because, in the conditional text, we are taking the difference of an integer and a size_t (since the sizeof operator returns a value of size_t). Since, in performing an operation on two different data types the end result is the data type of the higher order, the end result of the difference calculation is a size_t variable which is unsigned and will thus always evaluate to greater than zero.
+
+B) We can rewrite the conditional test to make it work properly by typecasting the sizeof(val) as an integer so that the difference operation between maxbytes and sizeof(val) will produce an integer variable that is able to be negative.

@@ -1,0 +1,40 @@
+2.82
+
+A) FALSE. This example will not always yield 1. It evaluates false in the case that x = INT_MIN and y = INT_MAX.
+
+B) TRUE. This example will always yield 1. We know this because we can simplify the right hand expression to have it match the left as follows:
+
+(( x + y ) << 4 ) + y Ð x = 17*y + 15*x
+(( x + y ) << 4 ) + y Ð x = ( y << 4 ) + y + ( x << 4 ) Ð x
+(( x + y ) << 4 ) + y Ð x = (( x + y ) << 4 ) + y Ð x
+
+We know the above because multiplying a number by 2^w left shifts the number by w. So, we manipulate the right side so that we multiply both x and y by 16 but then subtract or add the appropriate values so that we are really multiply x and y by 15 and 17, respectively. Thus, we see that the expressions are equivalent
+
+C) TRUE. This example will always yield 1. Let us look to simplifying both sides using the formula -x = ~x + 1 but rearranging the expression so that ~x = -1 Ð x
+
+(-1 Ð x) +(-1-y)+1 = -1-x-y
+-1-x-y = -1-x-y
+
+And we see that they are the same.
+
+
+D) TRUE. This example will always yield 1. Let us look to simplifying both sides, keeping in mind that -x = ~x + 1
+
+(ux Ð uy) = -(unsigned)(y-x)
+ux + -uy = -(unsigned)(y + (-x))
+ux + ~uy + 1 = -(unsigned)(y+~x+1)
+ux + ~uy + 1 = (unsigned)(~y+x+0+1)
+ux + ~uy + 1 = (unsigned)(~y+x+1)
+
+Since both ux and x as well as uy and y have the same bit vectors, and they both produce unsigned integers, they will be read as the same number.
+
+E) TRUE. This example will always yield 1. This is because, in executing the shifts on the left side, we are essentially zero-ing out the rightmost two bits which means the resulting value will either be equal to the original value (in the case that the rightmost two bits were originally zero) or less than the original value (in the case that one or more of the rightmost two bits were originally one).
+
+F) TRUE. This example will always yield 1. Let us analyze the right side expression to see if we can prove it is equal to the left side.
+
+The first term of the right side performs a one bit logical right shift on the unsigned x. Meanwhile, the second term of the right side expression produces a bit vector that is all zeros except for the leftmost bit. The leftmost bit is either zero or one based on what the leftmost bit of the unsigned x is.
+
+Looking at the left side, we see that there is a arithmetic shift on the signed x. Since the definition of a arithmetic shift is to fill in the left spot with either 1 or 0 based on the leftmost digit of the original number, this is the same as what the right side is doing. Thus, the two sides are equal.
+
+G) TRUE. This example will always yield 1. Looking at the definition of modulus, we know that the result of the left side will produce a bit vector with all zeros except the rightmost three bits (which could be 1 or 0 based on x). Then, looking at the right side, we see that we are going to produce a number where, no matter the x, only the rightmost three bits will remain non-zero.
+
