@@ -1,0 +1,40 @@
+Nikki Woo 204927670
+
+openmplab.txt
+
+In this lab, we attempt to use openmp as well as other optimization techniques discussed in the textbook to speed up the functions specified in func.c.
+
+We begin by downloading the openmp file provided and importing it to our SEAS Linux server. We note that we can make an executable file to run func.c via the command
+
+make seq
+
+and we make an executable again running func.c using the openmp package via the command
+
+make omp
+
+We can run the executables using
+
+./seq
+
+and
+
+./omp
+
+respectively. To check for correct output and memory leaks:
+
+make check
+
+make omp MTRACE=1
+make checkmem
+
+We now have the tools to begin. I began by using the OpenMP parallelism command in a few of the functions so that multiple threads would be created to optimize the for-loops, making sure to declare firstprivate and private for certain variables so that the each thread had its own copy of a variable and there was no data sharing issues as well as reduction so that manipulation of shared variables across threads was consistent.
+
+In between modifications, I made sure to remake the omp executable and test that the changes I was making were indeed speeding up the program. In some cases, optimizations that I tested made the program slower and thus I removed these.
+
+I modified func1 by first compiling the multiple for-loops into one nested for-loop structure and then using the openmp parallelism commands (#pragma omp parallel) in the created nested for-loop. Furthermore, seeing as there are only six registers allocated for function arguments and thus any arguments past the sixth one will be stored on the stack, I created local variables for some of the arguments past the sixth one (more specifically for Ones, n, Y, and Z) and used those instead of the actual arguments for faster access. 
+
+I modified func2 by concatenating the three initial for-loops into two for-loops and then using the omp parallel command.
+
+I modified func3, func4, and func5 by again using the omp parallel command.
+
+In the end, with all these modifications, I was able to reduce time of the omp executable down to about .11 on average. This is a significant improvement from the .69 time taken for the initial seq executable to run. However, I have found that these times tend to fluctuate a lot based on who is using the server at that time. These times were taken early in the morning when the server was not as busy.
